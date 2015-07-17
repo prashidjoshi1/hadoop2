@@ -1,0 +1,765 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Module 3: Getting Started With Hadoop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Module 3: Getting Started With Hadoop</h1>
+<div class="main">
+<div style="text-align: center;">
+<p> <a href="module2.html">Previous module</a> &nbsp;|&nbsp; <a
+ href="../start-tutorial.html">Table of contents</a> &nbsp;|&nbsp; <a
+ href="module4.html">Next module</a> </p>
+</div>
+<a name="intro"> </a>
+<h2><a name="intro">Introduction</a></h2>
+<a name="intro"> </a>
+<p><a name="intro">Hadoop is an open source implementation of the
+MapReduce platform and distributed file system, written in Java. This
+module explains the basics of how to begin using Hadoop to experiment
+and learn from the rest of this tutorial. It covers setting up the
+platform and connecting other tools to use it.</a></p>
+<a name="intro"> </a><a name="goals"> </a>
+<h2><a name="goals">Goals for this Module:</a></h2>
+<a name="goals"> </a>
+<ul>
+  <a name="goals"> </a>
+  <li><a name="goals">Set up a pre-configured Hadoop virtual machine</a></li>
+  <a name="goals"> </a>
+  <li><a name="goals">Verify that you can connect to the virtual machine</a></li>
+  <a name="goals"> </a>
+  <li><a name="goals">Understand tools available to help you use Hadoop</a></li>
+  <a name="goals"> </a>
+</ul>
+<a name="goals"> </a><a name="outline"> </a>
+<h2><a name="outline">Outline</a></h2>
+<a name="outline"> </a>
+<ol>
+  <a name="outline"> </a>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#goals">Goals for this Module</a></li>
+  <li><a href="#outline">Outline</a></li>
+  <li><a href="#prereq">Prerequisites</a></li>
+  <li><a href="#vm">A Virtual Machine Hadoop Environment</a></li>
+  <ol>
+    <li><a href="#vmware-install">Installing VMware Player</a></li>
+    <li><a href="#vm-setup">Setting up the Virtual Environment</a></li>
+    <li><a href="#vm-users">Virtual Machine User Accounts</a></li>
+    <li><a href="#vm-jobs">Running a Hadoop Job</a></li>
+    <li><a href="#vm-ssh">Accessing the VM via ssh</a></li>
+    <li><a href="#vm-shutdown">Shutting Down the VM</a></li>
+  </ol>
+  <li><a href="#eclipse">Getting Started With Eclipse</a></li>
+  <ol>
+    <li><a href="#eclipse-dl">Downloading and Installing</a></li>
+    <li><a href="#plugin-install">Installing the Hadoop MapReduce Plugin</a></li>
+    <li><a href="#hadoop-copy">Making a Copy of Hadoop</a></li>
+    <li><a href="#eclipse-run">Running Eclipse</a></li>
+    <li><a href="#plugin-conf">Configuring the MapReduce Plugin</a></li>
+  </ol>
+  <li><a href="#dfs">Interacting With HDFS</a></li>
+  <ol>
+    <li><a href="#dfs-cmd">Using the Command Line</a></li>
+    <li><a href="#dfs-plugin">Using the MapReduce Plugin For Eclipse</a></li>
+  </ol>
+  <li><a href="#running">Running a Sample Program</a></li>
+  <ol>
+    <li><a href="#run-create">Creating the Project</a></li>
+    <li><a href="#run-source">Creating the Source Files</a></li>
+    <li><a href="#run-run">Launching the Job</a></li>
+  </ol>
+  <li><a href="#refs">References &amp; Resources</a></li>
+  <li><a href="#tools">Complete Tools List</a></li>
+</ol>
+<a name="prereq"> </a>
+<h2><a name="prereq">Prerequisites</a></h2>
+<a name="prereq"> </a>
+<p><a name="prereq">Developing for Hadoop requires a Java programming
+environment. You can download a Java Development Kit (JDK) for a wide
+variety of operating systems from </a><a href="http://java.sun.com">http://java.sun.com</a>.
+Hadoop requires the Java Standard Edition (Java SE), version 6, which
+is the most current version at the time of this writing. </p>
+<a name="vm"> </a>
+<h2><a name="vm">A Virtual Machine Hadoop Environment</a></h2>
+<a name="vm"> </a>
+<p><a name="vm">This section explains how to configure a virtual
+machine to run Hadoop within your host computer. After installing the
+virtual machine software and the virtual machine image, you will learn
+how to log in and run jobs within the Hadoop environment.</a></p>
+<a name="vm"> </a>
+<p><a name="vm">Users of Linux, Mac OSX, or other Unix-like
+environments are able to install Hadoop and run it on one (or more)
+machines with no additional software beyond Java. If you are interested
+in doing this, there are instructions available on the Hadoop web site
+in the </a><a
+ href="http://hadoop.apache.org/core/docs/current/quickstart.html">quickstart</a>
+document.</p>
+<p>Running Hadoop on top of Windows requires installing <a
+ href="http://www.cygwin.com">cygwin</a>, a Linux-like environment that
+runs within Windows. Hadoop works reasonably well on cygwin, but it is
+officially for "development purposes only." Hadoop on cygwin may be
+unstable, and installing cygwin itself can be cumbersome. </p>
+<p>To aid developers in getting started easily with Hadoop, we have
+provided a <i>virtual machine image</i> containing a preconfigured
+Hadoop installation. The virtual machine image will run inside of a
+"sandbox" environment in which we can run another operating system. The
+OS inside the sandbox does not know that there is another operating
+environment outside of it; it acts as though it is on its own computer.
+This sandbox environment is referred to as the "guest machine" running
+a "guest operating system." The actual physical machine running the VM
+software is referred to as the "host machine" and it runs the "host
+operating system." The virtual machine provides other host-machine
+applications with the appearance that another physical computer is
+available on the same network. Applications running on the host machine
+see the VM as a separate machine with its own IP address, and can
+interact with the programs inside the VM in this fashion. </p>
+<div style="text-align: center;"> <a name="fig3-1"> <img
+ src="figs/vm-in-windows.png" align="middle"> <br>
+Figure 3.1: A virtual machine encapsulates one operating system within
+another. Applications in the VM believe they run on a separate physical
+host from other applications in the external operating system. Here we
+demonstrate a Windows host machine and a Linux guest (virtual) machine.
+</a></div>
+<a name="fig3-1"> </a>
+<p><a name="fig3-1">Application developers do not need to use the
+virtual machine to run Hadoop. Developers on Linux typically use Hadoop
+in their native development environment, and Windows users often
+install cygwin for Hadoop development. The virtual machine provided
+with this tutorial allows users a convenient alternative development
+platform with a minimum of configuration required. Another advantage of
+the virtual machine is its easy reset functionality. If your
+experiments break the Hadoop configuration or render the operating
+system unusable, you can always simply copy the virtual machine image
+from the CD back to where you installed it on your computer, and start
+from a known-good state.</a></p>
+<a name="fig3-1"> </a>
+<p><a name="fig3-1">Our virtual machine will run Linux, and comes
+preconfigured to run Hadoop in pseudo-distributed mode on this system.
+(It is configured like a fully distributed system, but is actually
+running on a single machine instance.) We can write Hadoop programs
+using editors and other applications of the host platform, and run them
+on our "cluster" consisting of just the virtual machine. We will
+connect our host environment to the virtual machine through the
+network. </a></p>
+<a name="fig3-1"> </a>
+<p><a name="fig3-1">It should be noted that the virtual machine will
+also run inside of another instance of Linux. Linux users can install
+the virtual machine software and run the Hadoop VM as well; the same
+separation between host processes and guest processes applies here. </a></p>
+<a name="fig3-1"> </a><a name="vmware-install"> </a>
+<h3><a name="vmware-install">Installing VMware Player</a></h3>
+<a name="vmware-install"> </a>
+<p><a name="vmware-install">The virtual machine is designed to run
+inside of the </a><a href="http://www.vmware.com">VMware</a> Player. A
+copy of the VMware player installer (version 2.5) for both 32-bit
+Windows and Linux
+is included here (<a
+ href="../vmware-player-install-images/vmplayer250-118166-linux-i386.rpm">linux-rpm</a>,
+<a
+ href="../vmware-player-install-images/vmplayer250-118166-linux-i386.bundle">linux-bundle</a>,
+<a
+ href="../vmware-player-install-images/vmplayer250-118166-windows.exe">windows-exe</a>).
+A <a href="../vmware-player-install-images/vmware_player250.pdf">Getting
+Started</a> guide for VMware player provides instructions for
+installing the VMware player. Review the <a
+ href="../vmware-player-install-images/vmware-player-license.html">license
+information</a> for VMware player before using it..</p>
+<p>If you are running on a different operating system, or would prefer
+to download a more recent version of the player, an alternate
+installation strategy is to navigate to <a
+ href="http://info.vmware.com/content/GLP_VMwarePlayer">http://info.vmware.com/content/GLP_VMwarePlayer</a>.
+You will need to register for a "virtualization starter kit." You will
+receive an email with a link to "Download VMware Player." Click the
+link, then click the "download now" button at the top of the screen
+under "most recent version" and follow the instructions. VMware Player
+is available for Windows or Linux. The latter is available in both 32-
+and 64-bit versions. </p>
+<p>VMware Player itself is approximately a 170 MB download. When the
+download has completed, run the installer program to set up VMware
+Player, and follow the prompts as directed. Installation in Windows is
+performed by a typical Windows installation process.</p>
+<a name="vm-setup"> </a>
+<h3><a name="vm-setup">Setting up the Virtual Environment</a></h3>
+<a name="vm-setup"> </a>
+<p><a name="vm-setup">Next, </a><a name="vm-setup">copy the </a><a
+ href="../hadoop-virtual-machine/hadoop-vm-appliance-0-18-0.zip">Hadoop
+Virtual Machine </a>
+into a location on your hard drive. It is a zipped vmware folder
+(hadoop-vm-appliance-0-18-0) which includes a few files<a
+ name="vm-setup">; a
+<tt>.vmdk</tt> file that is a snapshot of the virtual machine's hard
+drive, and a <tt>.vmx</tt> file which contains the configuration
+information to start the virtual machine. After unzipping the vmware
+folder zip file, to start the virtual machine,
+double-click on the <tt>hadoop-appliance-0.18.0.vmx</tt> file in
+Windows Explorer.</a></p>
+<a name="vm-setup"> </a>
+<div style="text-align: center;"><a name="vm-setup"> </a><a
+ name="fig3-2"> <img src="figs/vm-copy.png" align="middle"> <br>
+Figure 3.2: When you start the virtual machine for the first time, tell
+VMware Player that you have copied the VM image. </a></div>
+<a name="fig3-2"> </a>
+<p><a name="fig3-2">When you start the virtual machine for the first
+time, VMware Player will recognize that the virtual machine image is
+not in the same location it used to be. You should inform VMware Player
+that you <i>copied</i> this virtual machine image. VMware Player will
+then generate new session identifiers for this instance of the virtual
+machine. If you later move the VM image to a different location on your
+own hard drive, you should tell VMware Player that you have moved the
+image.</a></p>
+<a name="fig3-2"> </a>
+<p><a name="fig3-2">If you ever corrupt the VM image (e.g., by
+inadvertently deleting or overwriting important files), you can always
+restore a pristine copy of the virtual machine by copying a fresh VM
+image off of this tutorial CD. (So don't be shy about exploring! You
+can always reset it to a functioning state.)</a></p>
+<a name="fig3-2"> </a>
+<p><a name="fig3-2">After you select this option and click OK, the
+virtual machine should begin booting normally. You will see it perform
+the standard boot procedure for a Linux system. It will bind itself to
+an IP address on an unused network segment, and then display a prompt
+allowing a user to log in.</a></p>
+<a name="fig3-2"> </a><a name="vm-users"> </a>
+<h3><a name="vm-users">Virtual Machine User Accounts</a></h3>
+<a name="vm-users"> </a>
+<p><a name="vm-users">The virtual machine comes preconfigured with two
+user accounts: "root" and "hadoop-user". The hadoop-user account has
+sudo permissions to perform system management functions, such as
+shutting down the virtual machine. The vast majority of your
+interaction with the virtual machine will be as hadoop-user. </a></p>
+<a name="vm-users"> </a>
+<p><a name="vm-users">To log in as hadoop-user, first click inside the
+virtual machine's display. The virtual machine will take control of
+your keyboard and mouse. To escape back into Windows at any time, press
+CTRL+ALT at the same time. The hadoop-user user's password is <tt>hadoop</tt>.
+To log in as root, the password is <tt>root</tt>.</a></p>
+<a name="vm-users"> </a><a name="vm-jobs"> </a>
+<h3><a name="vm-jobs">Running a Hadoop Job</a></h3>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">Now that the VM is started, or you have installed
+Hadoop on your own system in pseudo-distributed mode, let us make sure
+that Hadoop is properly configured.</a></p>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">If you are using the VM, log in as hadoop-user, as
+directed above. You will start in your home directory: <tt>/home/hadoop-user</tt>.
+Typing <tt>ls</tt>, you will see a directory named <tt>hadoop/</tt>,
+as well as a set of scripts to manage the server. The virtual machine's
+hostname is <tt>hadoop-desk</tt>.</a></p>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">First, we must start the Hadoop system. Type the
+following command:</a></p>
+<a name="vm-jobs"> </a>
+<div class="code">
+<pre><a name="vm-jobs">hadoop-user@hadoop-desk:~$ ./start-hadoop</a></pre>
+</div>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">If you installed Hadoop on your host system, use
+the following commands to launch hadoop (assuming you installed to <tt>~/hadoop</tt>):</a></p>
+<a name="vm-jobs"> </a>
+<div class="code">
+<pre><a name="vm-jobs">you@your-machine:~$ cd hadoop<br>you@your-machine:~/hadoop$ bin/start-all.sh</a></pre>
+</div>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">You will see a set of status messages appear as
+the services boot. If prompted whether it is okay to connect to the
+current host, type "yes". Try running an example program to ensure that
+Hadoop is correctly configured:</a></p>
+<a name="vm-jobs"> </a>
+<div class="code">
+<pre><a name="vm-jobs">hadoop-user@hadoop-desk:~$ cd hadoop<br>hadoop-user@hadoop-desk:~/hadoop$ bin/hadoop jar hadoop-0.18.0-examples.jar pi 10 1000000</a></pre>
+</div>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">This should provide output that looks something
+like this:</a></p>
+<a name="vm-jobs"> </a>
+<div class="code">
+<pre><a name="vm-jobs">Wrote input for Map #1<br>Wrote input for Map #2<br>Wrote input for Map #3<br>...<br>Wrote input for Map #10<br>Starting Job<br>INFO mapred.FileInputFormat: Total input paths to process: 10<br>INFO mapred.JobClient: Running job: job_200806230804_0001<br>INFO mapred.JobClient: map 0% reduce 0%<br>INFO mapred.JobClient: map 10% reduce 0%<br>...<br>INFO mapred.JobClient: map 100% reduce 100%<br>INFO mapred.JobClient: Job complete: job_200806230804_0001<br>...<br>Job Finished in 25.841 second<br>Estimated value of PI is 3.141688</a></pre>
+</div>
+<a name="vm-jobs"> </a>
+<p><a name="vm-jobs">This task runs a simulation to estimate the value
+of pi based on sampling. The test first wrote out a number of points to
+a list of files, one per map task. It then calculated an estimate of pi
+based on these points, in the MapReduce task itself. How MapReduce
+works and how to write such a program are discussed in the next module.
+The Hadoop client program you used to launch the pi test launched the
+job, displayed some progress update information as to how the job is
+proceeding, and then displayed some final performance counters and the
+job-specific output: an estimate for the value of pi. </a></p>
+<a name="vm-jobs"> </a><a name="vm-ssh"> </a>
+<h3><a name="vm-ssh">Accessing the VM via ssh</a></h3>
+<a name="vm-ssh"> </a>
+<p><a name="vm-ssh">Rather than directly use the terminal of the
+virtual machine, you can also log in "remotely" over ssh from the host
+environment. Using an ssh client like putty (in Windows), log in with
+username "hadoop-user" (password <tt>hadoop</tt>) to the IP address
+displayed in the virtual machine terminal when it starts up. You can
+now interact with this virtual machine as if it were another Linux
+machine on the network.</a></p>
+<a name="vm-ssh"> </a>
+<p><a name="vm-ssh">This can only be done from the host machine. The
+VMware image is, by default, configured to use <i>host-only</i>
+networking; only the host machine can talk to the virtual machine over
+its network interface. The virtual machine does not appear on the
+actual external network. This is done for security purposes.</a></p>
+<a name="vm-ssh"> </a>
+<p><a name="vm-ssh">If you need to find the virtual machine's IP
+address later, the <tt>ifconfig</tt> command will display this under
+the "inet addr" field.</a></p>
+<a name="vm-ssh"> </a>
+<p><a name="vm-ssh">Important security note: In the VMware settings,
+you can reconfigure the virtual machine for networked access rather
+than host-only networking. If you enable network access, you can access
+the virtual machine from anywhere else on the network via its IP
+address. In this case, you should change the passwords associated with
+the accounts on the virtual machine to prevent unauthorized users from
+logging in with the default password.</a></p>
+<a name="vm-ssh"> </a><a name="vm-shutdown"> </a>
+<h3><a name="vm-shutdown">Shutting Down the VM</a></h3>
+<a name="vm-shutdown"> </a>
+<p><a name="vm-shutdown">When you are done with the virtual machine,
+you can turn it off by logging in as <tt>hadoop-user</tt> and typing <tt>sudo
+poweroff</tt>. The virtual machine will shut itself down in an orderly
+fashion and the window it runs in will disappear.</a></p>
+<a name="vm-shutdown"> </a><a name="eclipse"> </a>
+<h2><a name="eclipse">Getting Started With Eclipse</a></h2>
+<a name="eclipse"> </a>
+<p><a name="eclipse">A powerful development environment for Java-based
+programming is </a><a href="http://www.eclipse.org">Eclipse</a>.
+Eclipse is a free, open-source IDE. It supports multiple languages
+through a plugin interface, with special attention paid to Java. Tools
+designed for working with Hadoop can be integrated into Eclipse, making
+it an attractive platform for Hadoop development. In this section we
+will review how to obtain, configure, and use Eclipse.</p>
+<a name="eclipse-dl"> </a>
+<h3><a name="eclipse-dl">Downloading and Installing</a></h3>
+<a name="eclipse-dl"> </a>
+<p><a name="eclipse-dl"><b>Note:</b> The most current release of
+Eclipse is called <b>Ganymede</b>. Our testing shows that Ganymede is
+currently incompatible with the Hadoop MapReduce plugin. The most
+recent version which worked properly with the Hadoop plugin is version
+3.3.1, "Europa." To download Europa, do not visit the main Eclipse
+website; it can be found in the archive site </a><a
+ href="http://archive.eclipse.org/eclipse/downloads/">http://archive.eclipse.org/eclipse/downloads/</a>
+as the "Archived Release (3.3.1)."</p>
+<p>The Eclipse website has several versions available for download;
+choose either "Eclipse Classic" or "Eclipse IDE for Java Developers."</p>
+<p>Because it is written in Java, Eclipse is very cross-platform.
+Eclipse is available for Windows, Linux, and Mac OSX.</p>
+<p>Installing Eclipse is very straightforward. Eclipse is packaged as a
+<tt>.zip</tt> file. Windows itself can natively unzip the compressed
+file into a directory. If you encounter errors using the Windows
+decompression tool (see <a
+ href="http://wiki.eclipse.org/SDK_Known_Issues#Windows_issues">[1]</a>),
+try using a third-party unzip utility such as <a
+ href="http://www.7-zip.org">7-zip</a> or <a href="www.win-rar.com">WinRAR</a>.</p>
+<p>After you have decompressed Eclipse into a directory, you can run it
+straight from that directory with no modifications or other
+"installation" procedure. You may want to move it into <tt>C:\Program
+Files\Eclipse</tt> to keep consistent with your other applications, but
+it can reside in the Desktop or elsewhere as well.</p>
+<a name="plugin-install"> </a>
+<h3><a name="plugin-install">Installing the Hadoop MapReduce Plugin</a></h3>
+<a name="plugin-install"> </a>
+<p><a name="plugin-install">Hadoop comes with a plugin for Eclipse that
+makes developing MapReduce programs easier. In the <tt>hadoop-0.18.0/contrib/eclipse-plugin</tt>
+directory on this CD, you will find a file named <tt>hadoop-0.18.0-eclipse-plugin.jar</tt>.
+Copy this into the <tt>plugins/</tt> subdirectory of wherever you
+unzipped Eclipse. </a></p>
+<a name="plugin-install"> </a><a name="hadoop-copy"> </a>
+<h3><a name="hadoop-copy">Making a Copy of Hadoop</a></h3>
+<a name="hadoop-copy"> </a>
+<a name="hadoop-copy"> </a>
+<p><a name="hadoop-copy">While we will be running MapReduce programs on
+the virtual machine, we will be compiling them on the host machine. The
+host therefore needs a copy of the Hadoop jars to compile your code
+against. Copy the <tt>/hadoop-0.18.0<span
+ style="font-family: Arial,Helvetica,Verdana,Sans-Serif;"></span></tt>
+directory from the CD into a
+location on your local drive, and remember where this is. You do not
+need to configure this copy of Hadoop in any way.<br>
+<br>
+</a></p>
+<a name="hadoop-copy"> </a><a name="eclipse-run"> </a>
+<h3><a name="eclipse-run">Running Eclipse</a></h3>
+<a name="eclipse-run"> </a>
+<p><a name="eclipse-run">Navigate into the Eclipse directory and run <tt>eclipse.exe</tt>
+to start the IDE. Eclipse stores all of your source projects and their
+related settings in a directory called a <i>workspace</i>. </a></p>
+<p><a name="eclipse-run">Upon starting Eclipse, it will prompt you for
+a directory to act as the workspace. Choose a directory name that makes
+sense to you and click OK.</a></p>
+<a name="eclipse-run"> </a>
+<div style="text-align: center;"><a name="eclipse-run"> </a><a
+ name="fig3-3"> <img src="figs/eclipse-workspace.png" align="middle"> <br>
+Figure 3.3: When you first start Eclipse, you must choose a directory
+to act as your workspace. </a></div>
+<a name="fig3-3"> </a><a name="plugin-conf"> </a>
+<h3><a name="plugin-conf">Configuring the MapReduce Plugin</a></h3>
+<a name="plugin-conf"> </a>
+<p><a name="plugin-conf">In this section, we will walk through the
+process of configuring Eclipse to switch to the MapReduce perspective
+and connect to the Hadoop virtual machine.</a></p>
+<a name="plugin-conf"> </a>
+<p><a name="plugin-conf"><b>Step 1: If you have not already done so,
+start Eclipse</b> and choose a workspace directory. If you are
+presented with a "welcome" screen, click the button that says "Go to
+the Workbench." The Workbench is the main view of Eclipse, where you
+can write source code, launch programs, and manage your projects. </a></p>
+<a name="plugin-conf"> </a>
+<p><a name="plugin-conf"><b>Step 2: Start the virtual machine.</b>
+Double-click on the <tt>image.vmx</tt> file in the virtual machine's
+installation directory to launch the virtual machine. It should begin
+the Linux boot process.</a></p>
+<a name="plugin-conf"> </a>
+<p><a name="plugin-conf"><b>Step 3: Switch to the MapReduce perspective.</b>
+In the upper-right corner of the workbench, click the "Open
+Perspective" button, as shown in Figure 3.4:</a></p>
+<a name="plugin-conf"> </a>
+<div style="text-align: center;"><a name="plugin-conf"> </a><a
+ name="fig3-4"> <img src="figs/perspective.png" align="middle"> <br>
+Figure 3.4: Changing the Perspective </a></div>
+<a name="fig3-4"> </a>
+<p><a name="fig3-4">Select "Other," followed by "Map/Reduce" in the
+window that opens up. At first, nothing may appear to change. In the
+menu, choose <b>Window * Show View * Other</b>. Under "MapReduce
+Tools," select "Map/Reduce Locations." This should make a new panel
+visible at the bottom of the screen, next to Problems and Tasks.</a></p>
+<a name="fig3-4"> </a>
+<p><a name="fig3-4"><b>Step 4: Add the Server.</b> In the Map/Reduce
+Locations panel, click on the elephant logo in the upper-right corner
+to add a new server to Eclipse.</a></p>
+<a name="fig3-4"> </a>
+<div style="text-align: center;"><a name="fig3-4"> </a><a name="fig3-5"><img
+ src="figs/new-server.png" align="middle"> <br>
+Figure 3.5: Adding a New Server </a></div>
+<a name="fig3-5"> </a>
+<p><a name="fig3-5">You will now be asked to fill in a number of
+parameters identifying the server. To connect to the VMware image, the
+values are:</a></p>
+<a name="fig3-5"> </a>
+<div class="code">
+<pre><a name="fig3-5">Location name: (Any descriptive name you want; e.g., "VMware server")<br>Map/Reduce Master Host: (The IP address printed at startup)<br>Map/Reduce Master Port: 9001<br>DFS Master Port: 9000<br>User name: hadoop-user</a></pre>
+</div>
+<a name="fig3-5"> </a>
+<p><a name="fig3-5">Next, click on the "Advanced" tab. There are two
+settings here which must be changed.</a></p>
+<a name="fig3-5"> </a>
+<p><a name="fig3-5">Scroll down to <tt>hadoop.job.ugi</tt>. It
+contains your current Windows login credentials. Highlight the first
+comma-separated value in this list (your username) and replace it with <tt>hadoop-user</tt>.</a></p>
+<a name="fig3-5"> </a>
+<p><a name="fig3-5">Next, scroll further down to <tt>mapred.system.dir</tt>.
+Erase the current value and set it to <tt>/hadoop/mapred/system</tt>. </a></p>
+<a name="fig3-5"> </a>
+<p><a name="fig3-5">When you are done, click "Finish." Your server will
+now appear in the Map/Reduce Locations panel. If you look in the
+Project Explorer (upper-left corner of Eclipse), you will see that the
+MapReduce plugin has added the ability to browse HDFS. Click the [+]
+buttons to expand the directory tree to see any files already there. If
+you inserted files into HDFS yourself, they will be visible in this
+tree.</a></p>
+<a name="fig3-5"> </a>
+<div style="text-align: center;"><a name="fig3-5"> </a><a name="fig3-6"><img
+ src="figs/dfs-view.png" align="middle"> <br>
+Figure 3.6: Files Visible in the HDFS Viewer </a></div>
+<a name="fig3-6"> </a>
+<p><a name="fig3-6">Now that your system is configured, the following
+sections will introduce you to the basic features and verify that they
+work correctly.</a></p>
+<a name="fig3-6"> </a><a name="dfs"> </a>
+<h2><a name="dfs">Interacting With HDFS</a></h2>
+<a name="dfs"> </a>
+<p><a name="dfs">The VMware image will expose a single-node HDFS
+instance for your use in MapReduce applications. If you are logged in
+to the virtual machine, you can interact with HDFS using the
+command-line tools described in Module 2. You can also manipulate HDFS
+through the MapReduce plugin.</a></p>
+<a name="dfs"> </a><a name="dfs-cmd"> </a>
+<h3><a name="dfs-cmd">Using the Command Line</a></h3>
+<a name="dfs-cmd"> </a>
+<p><a name="dfs-cmd">An interesting MapReduce task will require some
+external data to process: log files, web crawl results, etc. Before you
+can begin processing with MapReduce, data must be loaded into its
+distributed file system. In </a><a href="module2.html">Module 2</a>,
+you learned how to copy files from the local file system into HDFS. But
+this will copy files from the local file system of the VM into HDFS -
+not from the file system of your host computer.</p>
+<p>To load data into HDFS in the virtual machine, you have several
+options available to you:</p>
+<ol>
+  <li>scp the files to the virtual machine, and then use the <tt>bin/hadoop
+fs -put ...</tt> syntax to copy the files from the VM's local file
+system into HDFS,</li>
+  <li>pipe the data from the local machine into a <tt>put</tt> command
+reading from stdin,</li>
+  <li>or install the Hadoop tools on the host system and configure it
+to communicate directly with the guest instance</li>
+</ol>
+<p>We will review each of these in turn.</p>
+<p>To load data into HDFS using the command line within the virtual
+machine, you can first send the data to the VM's local disk, then
+insert it into HDFS. You can send files to the VM using an scp client,
+such as the <b>pscp</b> component of <a
+ href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/">putty</a>,
+or <a href="http://www.winscp.net">WinSCP</a>. </p>
+<p>scp will allow you to copy files from one machine to another over
+the network. The scp command takes two arguments, both of the form [[<i>username</i>@]<i>hostname</i>]:<i>filename</i>.
+The scp command itself is of the form <tt>scp <i>source</i> <i>dest</i></tt>,
+where <i>source</i> and <i>dest</i> are formatted as described above.
+By default, it will assume that paths are on the local host, and should
+be accessed using the current username. You can override the username
+and hostname to perform remote copies.</p>
+<p>So supposing you have a file named <tt>foo.txt</tt>, and you would
+like to copy this into the virtual machine which has IP address
+192.168.190.128, you can perform this operation with the command:</p>
+<div class="code">
+<pre>  $ scp foo.txt hadoop-user@192.168.190.128:foo.txt</pre>
+</div>
+<p>If you are using the <tt>pscp</tt> program, substitute <tt>pscp</tt>
+instead of <tt>scp</tt> above. A copy of the "regular" <tt>scp</tt>
+can be run under cygwin by downloading the OpenSSH package. pscp is a
+utility by the makers of putty and does not require cygwin.</p>
+<p>Note that since we did not specify a destination directory, it will
+go in <tt>/home/hadoop-user</tt> by default. To change the target
+directory, specify it after the hostname (e.g., <tt>hadoop-user@192.168.128.190:/some/dest/path/foo.txt</tt>.)
+You can also omit the destination filename, if you want it to be
+identical to the source filename. However, if you omit both the target
+directory and filename, you must not forget the colon (":") that
+follows the target hostname. Otherwise it will make a local copy of the
+file, with the name <tt>192.168.190.128</tt>. An equivalent correct
+command to copy <tt>foo.txt</tt> to <tt>/home/hadoop-user</tt> on the
+remote machine is:</p>
+<div class="code">
+<pre>  $ scp foo.txt hadoop-user@192.168.190.128:</pre>
+</div>
+<p>Windows users may be more inclined to use a GUI tool to perform scp
+commands. The free <a href="http://www.winscp.net">WinSCP</a> program
+provides an FTP-like GUI interface over scp.</p>
+<p>After you have copied files into the local disk of the virtual
+machine, you can log in to the virtual machine as <tt>hadoop-user</tt>
+and insert the files into HDFS using the standard Hadoop commands. For
+example,</p>
+<div class="code">
+<pre>hadoop-user@vm-instance:hadoop$ bin/hadoop dfs -put ~/foo.txt \<br>  /user/hadoop-user/input/foo.txt</pre>
+</div>
+<p>A second option available to upload individual files to HDFS from
+the host machine is to echo the file contents into a <tt>put</tt>
+command running via ssh. e.g., assuming you have the <tt>cat</tt>
+program (which comes with Linux or cygwin) to echo the contents of a
+file to the terminal output, you can connect its output to the input of
+a <tt>put</tt> command running over <tt>ssh</tt> like so:</p>
+<div class="code">
+<pre>you@host-machine$ cat <i>somefile</i> | ssh hadoop-user@<i>vm-ip-addr</i> \<br>  "hadoop/bin/hadoop fs -put - <i>destinationfile</i></pre>
+</div>
+<p>The <tt>-</tt> as an argument to the <tt>put</tt> command
+instructs the system to use stdin as its input file. This will copy <i>somefile</i>
+on the host machine to <i>destinationfile</i> in HDFS on the virtual
+machine.</p>
+<p>Finally, if you are running either Linux or cygwin, you can copy the
+/<span style="font-weight: bold;">hadoop-0.18.0</span> directory on the
+CD to your local instance. You can then
+configure <tt>hadoop-site.xml</tt> to use the virtual machine as the
+default distributed file system (by setting the <tt>fs.default.name</tt>
+parameter). If you then run <tt>bin/hadoop fs -put ...</tt> commands
+on this machine (or any other hadoop commands, for that matter), they
+will interact with HDFS as served by the virtual machine. See the <a
+ href="http://hadoop.apache.org/core/docs/current/quickstart.html">Hadoop
+quickstart</a> for instructions on configuring a Hadoop installation,
+or <a href="module7.html">Module 7</a> for a more thorough treatment.</p>
+<a name="dfs-plugin"> </a>
+<h3><a name="dfs-plugin">Using the MapReduce Plugin For Eclipse</a></h3>
+<a name="dfs-plugin"> </a>
+<p><a name="dfs-plugin">An easier way to manipulate files in HDFS may
+be through the Eclipse plugin. In the DFS location viewer, right-click
+on any folder to see a list of actions available. You can create new
+subdirectories, upload individual files or whole subdirectories, or
+download files and directories to the local disk.</a></p>
+<a name="dfs-plugin"> </a>
+<p><a name="dfs-plugin">If <tt>/user/hadoop-user</tt> does not exist,
+create that first. Right-click on the top-level directory and select
+"Create New Directory". Type "user" and click OK. You will then need to
+<i>refresh</i> the current directory view by right-clicking and
+selecting "Refresh" from the pop-up menu. Repeat this process to create
+the "hadoop-user" directory under "user."</a></p>
+<a name="dfs-plugin"> </a>
+<p><a name="dfs-plugin">Now, prepare some local files to upload.
+Somewhere on your hard drive, create a directory named "input" and find
+some text files to copy there. In the DFS explorer, right-click the
+"hadoop-user" directory and click "Upload Directory to DFS." Select
+your new input folder and click OK. Eclipse will copy the files
+directly into HDFS, bypassing the local drive of the virtual machine.
+You may have to refresh the directory view to see your changes. You
+should now have a directory hierarchy containing the <tt>/user/hadoop-user/input</tt>
+directory, which has at least one text file in it.</a></p>
+<a name="dfs-plugin"> </a><a name="running"> </a>
+<h2><a name="running">Running a Sample Program</a></h2>
+<a name="running"> </a>
+<p><a name="running">While we have not yet formally introduced the
+programming style for Hadoop, we can still test whether a MapReduce
+program will run on our Hadoop virtual machine. This section walks you
+through the steps required to verify this.</a></p>
+<a name="running"> </a>
+<p><a name="running">The program that we will run is a word count
+utility. The program will read the files you uploaded to HDFS in the
+previous section, and determine how many times each word in the files
+appears.</a></p>
+<a name="running"> </a>
+<p><a name="running">If you have not already done so, start the virtual
+machine and Eclipse, and switch Eclipse to use the MapReduce
+perspective. Instructions are in the previous section. </a></p>
+<a name="running"> </a><a name="run-create"> </a>
+<h3><a name="run-create">Creating the Project</a></h3>
+<a name="run-create"> </a>
+<p><a name="run-create">In the menu, click <b>File * New * Project</b>.
+Select "Map/Reduce Project" from the list and click Next.</a></p>
+<a name="run-create"> </a>
+<p><a name="run-create">You now need to select a project name. Any name
+will do, e.g., "WordCount". You will also need to specify the Hadoop
+Library Installation Path. This is the path where you made a copy of
+the <tt>/hadoop-0.18.0</tt> folder on the CD.&nbsp; Since we have not
+yet configured this part
+of Eclipse, do so now by clicking "Configure Hadoop install
+directory..." and choosing the path where you copied Hadoop to. There
+should be a file named <tt>hadoop-0.18.0-core.jar</tt> in this
+directory. Creating a MapReduce Project instead of a generic Java
+project automatically adds the prerequisite jar files to the build
+path. If you create a regular Java project, you must add the Hadoop jar
+(and its dependencies) to the build path manually.</a></p>
+<a name="run-create"> </a>
+<p><a name="run-create">When you have completed these steps, click
+Finish.</a></p>
+<a name="run-create"> </a><a name="run-source"> </a>
+<h3><a name="run-source">Creating the Source Files</a></h3>
+<a name="run-source"> </a>
+<p><a name="run-source">Our program needs three classes to run: a
+Mapper, a Reducer, and a Driver. The Driver tells Hadoop how to run the
+MapReduce process. The Mapper and Reducer operate on your data.</a></p>
+<a name="run-source"> </a>
+<p><a name="run-source">Right-click on the "src" folder under your
+project and select <b>New * Other...</b>. In the "Map/Reduce" folder
+on the resulting window, we can create Mapper, Reducer, and Driver
+classes based on pre-written stub code. Create classes named <tt>WordCountMapper</tt>,
+<tt>WordCountReducer</tt>, and <tt>WordCount</tt> that use the Mapper,
+Reducer, and Driver stubs respectively. </a></p>
+<a name="run-source"> </a>
+<p><a name="run-source">The code for each of these classes is shown
+here. You can copy this code into your files.</a></p>
+<a name="run-source"> </a>
+<p><a name="run-source"><b>WordCountMapper.java:</b></a></p>
+<a name="run-source"> </a>
+<div class="code">
+<pre><a name="run-source">import java.io.IOException;<br>import java.util.StringTokenizer;<br><br>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.LongWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.io.Writable;<br>import org.apache.hadoop.io.WritableComparable;<br>import org.apache.hadoop.mapred.MapReduceBase;<br>import org.apache.hadoop.mapred.Mapper;<br>import org.apache.hadoop.mapred.OutputCollector;<br>import org.apache.hadoop.mapred.Reporter;<br><br>public class WordCountMapper extends MapReduceBase<br>    implements Mapper&lt;LongWritable, Text, Text, IntWritable&gt; {<br><br>  private final IntWritable one = new IntWritable(1);<br>  private Text word = new Text();<br><br>  public void map(WritableComparable key, Writable value,<br>      OutputCollector output, Reporter reporter) throws IOException {<br><br>    String line = value.toString();<br>    StringTokenizer itr = new StringTokenizer(line.toLowerCase());<br>    while(itr.hasMoreTokens()) {<br>      word.set(itr.nextToken());<br>      output.collect(word, one);<br>    }<br>  }<br>}</a></pre>
+</div>
+<a name="run-source"> </a>
+<p><a name="run-source"><b>WordCountReducer.java:</b></a></p>
+<a name="run-source"> </a>
+<div class="code">
+<pre><a name="run-source">import java.io.IOException;<br>import java.util.Iterator;<br><br>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.io.WritableComparable;<br>import org.apache.hadoop.mapred.MapReduceBase;<br>import org.apache.hadoop.mapred.OutputCollector;<br>import org.apache.hadoop.mapred.Reducer;<br>import org.apache.hadoop.mapred.Reporter;<br><br>public class WordCountReducer extends MapReduceBase<br>    implements Reducer&lt;Text, IntWritable, Text, IntWritable&gt; {<br><br>  public void reduce(Text key, Iterator values,<br>      OutputCollector output, Reporter reporter) throws IOException {<br><br>    int sum = 0;<br>    while (values.hasNext()) {<br>      IntWritable value = (IntWritable) values.next();<br>      sum += value.get(); // process value<br>    }<br><br>    output.collect(key, new IntWritable(sum));<br>  }<br>}</a></pre>
+</div>
+<a name="run-source"> </a>
+<p><a name="run-source"><b>WordCount.java:</b></a></p>
+<a name="run-source"> </a>
+<div class="code">
+<pre><a name="run-source">import org.apache.hadoop.fs.Path;<br>import org.apache.hadoop.io.IntWritable;<br>import org.apache.hadoop.io.Text;<br>import org.apache.hadoop.mapred.FileInputFormat;<br>import org.apache.hadoop.mapred.FileOutputFormat;<br>import org.apache.hadoop.mapred.JobClient;<br>import org.apache.hadoop.mapred.JobConf;<br><br>public class WordCount {<br><br>  public static void main(String[] args) {<br>    JobClient client = new JobClient();<br>    JobConf conf = new JobConf(WordCount.class);<br><br>    // specify output types<br>    conf.setOutputKeyClass(Text.class);<br>    conf.setOutputValueClass(IntWritable.class);<br><br>    // specify input and output dirs<br>    FileInputPath.addInputPath(conf, new Path("input"));<br>    FileOutputPath.addOutputPath(conf, new Path("output"));<br><br>    // specify a mapper<br>    conf.setMapperClass(WordCountMapper.class);<br><br>    // specify a reducer<br>    conf.setReducerClass(WordCountReducer.class);<br>    conf.setCombinerClass(WordCountReducer.class);<br><br>    client.setConf(conf);<br>    try {<br>      JobClient.runJob(conf);<br>    } catch (Exception e) {<br>      e.printStackTrace();<br>    }<br>  }<br>}</a></pre>
+</div>
+<a name="run-source"> </a>
+<p><a name="run-source">For now, don't worry about how these functions
+work; we will introduce how to write MapReduce programs in </a><a
+ href="module4.html">Module 4</a>. We currently just want to establish
+that we can run jobs on the virtual machine.</p>
+<a name="run-run"> </a>
+<h3><a name="run-run">Launching the Job</a></h3>
+<a name="run-run"> </a>
+<p><a name="run-run">After the code has been entered, it is time to run
+it. You have already created a directory named <tt>input</tt> below <tt>/user/hadoop-user</tt>
+in HDFS. This will serve as the input files to this process. In the
+Project Explorer, right-click on the driver class, <b>WordCount.java</b>.
+In the pop-up menu, select <b>Run As * Run On Hadoop</b>. A window
+will appear asking you to select a Hadoop location to run on. Select
+the VMware server that you configured earlier, and click Finish. </a></p>
+<a name="run-run"> </a>
+<p><a name="run-run">If all goes well, the progress output from Hadoop
+should appear in the console in Eclipse; it should look something like:</a></p>
+<a name="run-run"> </a>
+<div class="code">
+<pre><a name="run-run">08/06/25 12:14:22 INFO mapred.FileInputFormat: Total input paths to process : 3<br>08/06/25 12:14:23 INFO mapred.JobClient: Running job: job_200806250515_0002<br>08/06/25 12:14:24 INFO mapred.JobClient:  map 0% reduce 0%<br>08/06/25 12:14:31 INFO mapred.JobClient:  map 50% reduce 0%<br>08/06/25 12:14:33 INFO mapred.JobClient:  map 100% reduce 0%<br>08/06/25 12:14:42 INFO mapred.JobClient:  map 100% reduce 100%<br>08/06/25 12:14:43 INFO mapred.JobClient: Job complete: job_200806250515_0002<br>08/06/25 12:14:43 INFO mapred.JobClient: Counters: 12<br>08/06/25 12:14:43 INFO mapred.JobClient:   Job Counters<br>08/06/25 12:14:43 INFO mapred.JobClient:     Launched map tasks=4<br>08/06/25 12:14:43 INFO mapred.JobClient:     Launched reduce tasks=1<br>08/06/25 12:14:43 INFO mapred.JobClient:     Data-local map tasks=4<br>08/06/25 12:14:43 INFO mapred.JobClient:   Map-Reduce Framework<br>08/06/25 12:14:43 INFO mapred.JobClient:     Map input records=211<br>08/06/25 12:14:43 INFO mapred.JobClient:     Map output records=1609<br>08/06/25 12:14:43 INFO mapred.JobClient:     Map input bytes=11627<br>08/06/25 12:14:43 INFO mapred.JobClient:     Map output bytes=16918<br>08/06/25 12:14:43 INFO mapred.JobClient:     Combine input records=1609<br>08/06/25 12:14:43 INFO mapred.JobClient:     Combine output records=682<br>08/06/25 12:14:43 INFO mapred.JobClient:     Reduce input groups=568<br>08/06/25 12:14:43 INFO mapred.JobClient:     Reduce input records=682<br>08/06/25 12:14:43 INFO mapred.JobClient:     Reduce output records=568</a></pre>
+</div>
+<a name="run-run"> </a>
+<p><a name="run-run">In the DFS Explorer, right-click on <tt>/user/hadoop-user</tt>
+and select "Refresh." You should now see an "output" directory
+containing a file named <tt>part-00000</tt>. This is the output of the
+job. Double-clicking this file will allow you to view it in Eclipse;
+you can see each word and its frequency in the documents. (You may
+receive a warning that this file is larger than 1 MB, first. Click OK.)</a></p>
+<a name="run-run"> </a>
+<p><a name="run-run">If you want to run the job again, you will need to
+delete the output directory first. Right-click the output directory in
+the DFS Explorer and click "Delete."</a></p>
+<a name="run-run"> </a>
+<p><a name="run-run">Congratulations! You should now have a functioning
+Hadoop development environment. In the next module, we will learn how
+to use it to perform powerful programming tasks.</a></p>
+<a name="run-run"> </a><a name="refs"> </a>
+<h2><a name="refs">References &amp; Resources</a></h2>
+<a name="refs"> </a>
+<p><a name="refs">These resources are links to general Hadoop sites.
+They should be your first stop for troubleshooting or more information.</a></p>
+<a name="refs"> </a>
+<ul>
+  <a name="refs"> </a>
+  <li><a href="http://hadoop.apache.org/core/">Hadoop site</a> -
+Central location for downloads, documentation and information</li>
+  <li><a href="http://wiki.apache.org/hadoop/">Hadoop wiki</a> -
+User-powered documentation for Hadoop</li>
+  <li><a
+ href="http://hadoop.apache.org/core/docs/current/api/index.html">JavaDoc</a>
+- Current Hadoop API documentation</li>
+  <li><a href="http://hadoop.apache.org/core/mailing_lists.html">Mailing
+list info</a> - Hadoop community discussion &amp; advice</li>
+</ul>
+<a name="tools"> </a>
+<h2><a name="tools">Appendix: Complete Tools List</a></h2>
+<a name="tools"> </a>
+<p><a name="tools">Included in this section is a complete list of
+programs necessary to run Hadoop, and optional programs which may be
+helpful in installing or using it. Some of these assume a Windows
+development environment (though not necessarily a Windows-based
+cluster).</a></p>
+<a name="tools"> </a>
+<ul>
+  <a name="tools"> </a>
+  <li><a name="tools"><b>Necessary for Hadoop:</b></a></li>
+  <a name="tools"> </a>
+  <ul>
+    <a name="tools"> </a>
+    <li><a href="http://java.sun.com">Java SE SDK</a> [<a
+ href="http://java.sun.com/javase/downloads/?intcmp=1281">download</a>
+JDK 6 or higher] </li>
+    <li><a href="http://hadoop.apache.org/core/releases.html">Hadoop</a></li>
+  </ul>
+  <li><b>Useful for this tutorial:</b></li>
+  <ul>
+    <li><a href="http://info.vmware.com/content/GLP_VMwarePlayer">VMware
+Player</a></li>
+    <li><a href="http://www.eclipse.org/downloads/">Eclipse</a></li>
+  </ul>
+  <li><b>Generally helpful utilities:</b></li>
+  <ul>
+    <li><a href="http://www.winzip.com">WinZip</a>, <a
+ href="http://www.7-zip.org">7-Zip</a>, or <a
+ href="http://www.win-rar.com/">WinRAR</a></li>
+    <li><a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/">putty</a>
+and pscp</li>
+    <li><a href="http://winscp.net/">WinSCP</a></li>
+    <li><a href="http://www.cygwin.com">cygwin</a></li>
+  </ul>
+</ul>
+<div style="text-align: center;">
+<p> <a href="module2.html">Previous module</a> &nbsp;|&nbsp; <a
+ href="../start-tutorial.html">Table of contents</a> &nbsp;|&nbsp; <a
+ href="module4.html">Next module</a> </p>
+</div>
+</div>
+</body>
+</html>
