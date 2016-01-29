@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?><routes xmlns="http://camel.apache.org/schema/spring"><route id="wsRoute">
+<from uri="cxfrs:bean:atmosRSTAdmSvr" /><to uri="log:input"/></route><route id="logRoute"><from uri="file:src/data?noop=true"/><to uri="activemq:personnel.records"/><to uri="log:output"/></route></routes>
